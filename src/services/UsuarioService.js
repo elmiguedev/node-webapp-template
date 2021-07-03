@@ -9,4 +9,9 @@ service.obtenerUno = async (usuario, clave) => {
     return query;
 }
 
+service.obtenerTodo = async () => {
+    const query = await Usuario.query();
+    return query;
+}
+
 module.exports = service;
