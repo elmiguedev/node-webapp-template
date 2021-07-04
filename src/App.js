@@ -13,7 +13,6 @@ const app = express();
 // 3. configura el servidor web
 // ------------------------------------
 
-
 function configurarExpress() {
     app.use(express.json());
     app.use(express.static(path.join(__dirname, "public")));

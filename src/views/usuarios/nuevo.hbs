@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Nuevo usuario</h1>
+</div>
+
+<!-- formulario -->
+<div class="row">
+    <div class="col-md-4">
+
+        <form action="/usuarios/nuevo" method="POST">
+
+            <div class="form-group mb-2">
+                <label for="nombre"><strong>Nombre:</strong></label>
+                <input type="text" name="nombre" id="nombre" class="form-control">
+            </div>
+
+            <div class="form-group mb-2">
+                <label for="nombre"><strong>Perfil:</strong></label>
+                <select name="perfil" id="perfil" class="form-control">
+                    <option value="">Seleccione una opción</option>
+                    {{#each perfiles}}
+                    <option value="{{id}}">{{nombre}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group mb-2">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
