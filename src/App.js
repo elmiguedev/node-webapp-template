@@ -37,12 +37,8 @@ function configurarSeguridad() {
 
     passport.use(new LocalStrategy(async (usuario, clave, done) => {
         // aca va la logica de autenticacion
-        console.log("valida", usuario, clave);
         const UsuarioService = require("./services/UsuarioService");
-        const user = await UsuarioService.obtenerUno(usuario, clave);
-
-        console.log("el usuario", user);
-
+        const user = await UsuarioService.obtenerPorUsuarioClave(usuario,clave);
         if (user) {
             return done(null, user);
         } else {
@@ -51,10 +47,10 @@ function configurarSeguridad() {
     }));
 
     passport.serializeUser((user, done) => {
-        done(null, user.id);
+        done(null, user);
     })
-    passport.deserializeUser((id, done) => {
-        done(null, { id: 1, usuario: "migue" });
+    passport.deserializeUser((user, done) => {
+        done(null, user);
     })
 
     app.post("/login", passport.authenticate("local", {

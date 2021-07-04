@@ -12,16 +12,24 @@ const pg = knex({
     }
 });
 
-service.obtenerUno = async (usuario, clave) => {
+service.obtenerPorUsuarioClave = async (usuario,clave) => {
     const query = await pg("usuario")
         .where("nombre",usuario)
-        .andWhere("clave",clave)
+        .where("clave",clave)
         .andWhere("activo",true)
         .first();
-    
         console.log(query);
     return query;
 }
+
+service.obtenerUno = async (id) => {
+    const query = await pg("usuario")
+        .where("id",id)
+        .andWhere("activo",true)
+        .first();
+    return query;
+}
+
 
 service.obtenerTodo = async () => {
     const query = await pg("usuario")
@@ -36,8 +44,8 @@ service.obtenerTodo = async () => {
 service.insertar = async (usuario) => {
     await pg("usuario").insert({
         nombre: usuario.nombre,
-        perfil_id: usuario.perfil,
-        clave: "123456"
+        clave: usuario.nombre,
+        perfil_id: usuario.perfil
     });
 }
 
@@ -45,6 +53,13 @@ service.desactivar = async(id) => {
     await pg("usuario")
     .where("id",id)
     .update("activo",false);
+}
+
+service.actualizarClave = async (id, clave) => {
+    await pg("usuario")
+        .where("id",id)
+        .update("clave",clave)
+        .update("cambiar_clave",false);
 }
 
 module.exports = service;
