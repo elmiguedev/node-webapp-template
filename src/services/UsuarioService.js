@@ -12,14 +12,33 @@ const pg = knex({
     }
 });
 
+async function hashPassword(clave) {
+    const bcrypt = require("bcrypt");
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(clave, salt);
+    return hash;
+}
+
+async function comparePassword(clave, hash) {
+    const bcrypt = require("bcrypt");
+    const validate = await bcrypt.compare(clave, hash);
+    return validate;
+}
+
 service.obtenerPorUsuarioClave = async (usuario,clave) => {
-    const query = await pg("usuario")
+    const user = await pg("usuario")
         .where("nombre",usuario)
-        .where("clave",clave)
         .andWhere("activo",true)
         .first();
-        console.log(query);
-    return query;
+
+    const validate = await comparePassword(clave, user.clave);
+    if (validate) {
+        return user;
+
+    } else {
+        return undefined;
+    }
+
 }
 
 service.obtenerUno = async (id) => {
@@ -42,9 +61,10 @@ service.obtenerTodo = async () => {
 }
 
 service.insertar = async (usuario) => {
+    const hash = await hashPassword(usuario.nombre);
     await pg("usuario").insert({
         nombre: usuario.nombre,
-        clave: usuario.nombre,
+        clave: hash,
         perfil_id: usuario.perfil
     });
 }
@@ -56,9 +76,10 @@ service.desactivar = async(id) => {
 }
 
 service.actualizarClave = async (id, clave) => {
+    const hash = await hashPassword(clave);
     await pg("usuario")
         .where("id",id)
-        .update("clave",clave)
+        .update("clave", hash)
         .update("cambiar_clave",false);
 }
 

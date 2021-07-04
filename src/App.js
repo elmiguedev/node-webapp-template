@@ -39,6 +39,9 @@ function configurarSeguridad() {
         // aca va la logica de autenticacion
         const UsuarioService = require("./services/UsuarioService");
         const user = await UsuarioService.obtenerPorUsuarioClave(usuario,clave);
+
+        console.log("el user", usuario,clave)
+
         if (user) {
             return done(null, user);
         } else {
