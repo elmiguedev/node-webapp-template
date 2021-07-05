@@ -24,8 +24,13 @@
             </h1>
             <h1 class="h3 mb-3 fw-normal">Nombre aplicación</h1>
 
+            <div way-repeat="lista">
+                <span way-data="name"></span>
+            </div>
+
+ 
             <div class="form-floating">
-                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario">
+                <input way-data="coso" type="text" class="form-control" id="username" name="username" autofocus="true" placeholder="Usuario">
                 <label for="username">Usuario</label>
             </div>
             <div class="form-floating">
@@ -39,12 +44,24 @@
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Ingresar</button>
+
+            <p>
+                {{messages.error}}
+            </p>
+
             <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
         </form>
     </main>
 
 
-
+    <script src="/libs/way/way.js"></script>
+    <script>
+        way.set("lista",[
+            {name: "perrito"},
+            {name: "gatito"},
+            {name: "pajarito"},
+        ])
+    </script>
 </body>
 
 </html>

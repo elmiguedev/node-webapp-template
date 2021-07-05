@@ -25,8 +25,10 @@ function configurarSeguridad() {
     const passport = require("passport");
     const LocalStrategy = require("passport-local").Strategy;
     const secret = "mi clave super secreta";
+    const flash = require("express-flash");
 
     app.use(cookieParser(secret));
+    app.use(flash());
     app.use(session({
         secret: secret,
         resave: true,
@@ -40,12 +42,10 @@ function configurarSeguridad() {
         const UsuarioService = require("./services/UsuarioService");
         const user = await UsuarioService.obtenerPorUsuarioClave(usuario,clave);
 
-        console.log("el user", usuario,clave)
-
         if (user) {
             return done(null, user);
         } else {
-            return done(null, false);
+            return done(null, false, {message: "usuario o clave incorrecto"});
         }
     }));
 
@@ -58,14 +58,15 @@ function configurarSeguridad() {
 
     app.post("/login", passport.authenticate("local", {
         successRedirect: "/",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true,
     }));
 
 
 }
 
 function configurarViewEngine() {
-    const helpers = require("handlebars-helpers")
+    const helpers = require("handlebars-helpers")();
 
     app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs', helpers: helpers }));
     app.set('views', path.join(__dirname, 'views'));

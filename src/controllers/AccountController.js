@@ -44,7 +44,7 @@ controller.password = async (req, res) => {
         await UsuarioService.actualizarClave(req.user.id, req.body.clave);
         res.redirect("/logout");
     } else {
-        res.render("account/password", {layout:false});
+        res.render("account/password", {layout:false, });
     }
 
 }
